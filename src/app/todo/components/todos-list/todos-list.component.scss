@@ -1,0 +1,9 @@
+@import "../../../../styles.scss";
+
+.page{
+    position: absolute;
+    top: $headerHeight; 
+    left: 0;
+    height: calc(100% - $headerHeight);
+    width: 100%;
+}
