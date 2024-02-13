@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './core/components/home/home.component';
 
 const routes: Routes = [
     { path: 'todos', loadChildren: () => import('./todo/todo.module').then(m => m.TodoModule) },
-    { path: '**', redirectTo: 'todos' }
+    { path: '', component: HomeComponent },
+    { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
