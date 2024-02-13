@@ -1,8 +1,8 @@
-<div class="page bg-light pt-2">
+<div class="page pt-2">
     <ng-container *ngIf="(todos$ | async) as todos">
         <div class="container">
-            <div class="row align-items-start">
-                <div class="col-4 mx-auto">
+            <div class="row">
+                <div class="col-12 col-md-8 mx-auto">
                     <ul class="list-group">
                         <li *ngFor="let todo of todos" class="list-group-item">{{todo.title}}</li>
                     </ul>
