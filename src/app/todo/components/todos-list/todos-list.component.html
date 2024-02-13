@@ -4,7 +4,11 @@
             <div class="row">
                 <div class="col-12 col-md-8 mx-auto">
                     <ul class="list-group">
-                        <li *ngFor="let todo of todos" class="list-group-item">{{todo.title}}</li>
+                        <li *ngFor="let todo of todos" class="list-group-item d-flex justify-content-between">
+                            {{todo.title}}
+                            <span class="badge bg-primary rounded-pill" (click)="navigateTo(todo.id)"><i
+                                    class="bi bi-cursor"></i></span>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,8 @@
+<div class="page pt-2">
+    <ng-container *ngIf="(todo$ | async) as todo">
+        <app-single-todo-card [todo]="todo"></app-single-todo-card>
+    </ng-container>
+    <div class="d-grid col-8 col-md-4 mx-auto m-2">
+        <button class="btn btn-info" type="button" routerLink="/todos">Retour à la liste</button>
+    </div>
+</div>
