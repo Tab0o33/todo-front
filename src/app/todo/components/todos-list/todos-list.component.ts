@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TodoService } from '../../services/todo.service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Todo } from '../../../core/models/todo.model';
 
 @Component({
@@ -25,5 +25,12 @@ export class TodosListComponent implements OnInit {
     navigateTo(id: number) {
         this.router.navigateByUrl(`todos/${id}`);
     }
+
+    toggleIsDone(id: number, isDone: boolean) {
+        this.todoService.updateOne(id, { isDone: !isDone }).pipe(
+            tap(() => this.todos$ = this.todoService.getTodos())
+        ).subscribe();
+    }
+
 
 }
