@@ -1,4 +1,9 @@
 <div class="page pt-2">
+    <div *ngIf="loading$ | async" class="text-center">
+        <div class="spinner-border text-primary">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
     <ng-container *ngIf="(todo$ | async) as todo">
         <app-single-todo-card [todo]="todo"></app-single-todo-card>
     </ng-container>

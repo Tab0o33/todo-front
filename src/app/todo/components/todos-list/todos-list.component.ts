@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TodoService } from '../../services/todo.service';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Todo } from '../../../core/models/todo.model';
 
 @Component({
     selector: 'app-todos-list',
     templateUrl: './todos-list.component.html',
-    styleUrls: ['./todos-list.component.scss']
+    styleUrls: ['./todos-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodosListComponent implements OnInit {
 
+    loading$!: Observable<boolean>;
     todos$!: Observable<Todo[]>;
 
     constructor(
@@ -19,7 +21,13 @@ export class TodosListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.todos$ = this.todoService.getTodos();
+        this.initObservables();
+        this.todoService.getAll();
+    }
+
+    private initObservables() {
+        this.loading$ = this.todoService.loading$;
+        this.todos$ = this.todoService.todos$;
     }
 
     navigateTo(id: number) {
@@ -27,9 +35,7 @@ export class TodosListComponent implements OnInit {
     }
 
     toggleIsDone(id: number, isDone: boolean) {
-        this.todoService.updateOne(id, { isDone: !isDone }).pipe(
-            tap(() => this.todos$ = this.todoService.getTodos())
-        ).subscribe();
+        this.todoService.patchOne(id, { isDone: !isDone });
     }
 
 

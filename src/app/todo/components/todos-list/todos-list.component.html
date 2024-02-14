@@ -1,5 +1,10 @@
 <div class="page pt-2">
-    <ng-container *ngIf="(todos$ | async) as todos">
+    <div *ngIf="loading$ | async" class="text-center">
+        <div class="spinner-border text-primary">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <ng-container *ngIf="!(loading$ | async) && (todos$ | async) as todos">
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-8 mx-auto">
