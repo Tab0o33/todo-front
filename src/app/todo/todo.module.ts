@@ -7,6 +7,7 @@ import { TodosListComponent } from './components/todos-list/todos-list.component
 import { SingleTodoPageComponent } from './components/single-todo-page/single-todo-page.component';
 import { SingleTodoCardComponent } from './components/single-todo-card/single-todo-card.component';
 import { IsDonePipe } from './pipes/is-done.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import { IsDonePipe } from './pipes/is-done.pipe';
     ],
     imports: [
         CommonModule,
+        SharedModule,
         TodoRoutingModule
     ],
     providers: [

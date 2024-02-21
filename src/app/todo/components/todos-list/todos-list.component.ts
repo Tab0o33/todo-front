@@ -14,6 +14,7 @@ export class TodosListComponent implements OnInit {
 
     loading$!: Observable<boolean>;
     todos$!: Observable<Todo[]>;
+    error$!: Observable<any>;
 
     constructor(
         private todoService: TodoService,
@@ -27,6 +28,7 @@ export class TodosListComponent implements OnInit {
 
     private initObservables() {
         this.loading$ = this.todoService.loading$;
+        this.error$ = this.todoService.error$;
         this.todos$ = this.todoService.todos$;
     }
 

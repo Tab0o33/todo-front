@@ -14,6 +14,7 @@ export class SingleTodoPageComponent implements OnInit {
 
     loading$!: Observable<boolean>;
     todo$!: Observable<Todo>;
+    error$!: Observable<any>;
 
     constructor(
         private todoService: TodoService,
@@ -26,6 +27,7 @@ export class SingleTodoPageComponent implements OnInit {
 
     private initObservables() {
         this.loading$ = this.todoService.loading$;
+        this.error$ = this.todoService.error$;
         this.todo$ = this.route.params.pipe(
             switchMap(params => this.todoService.getOne(+params['id']))
         );

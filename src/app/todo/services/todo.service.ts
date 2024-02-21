@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, delay, map, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, catchError, delay, map, retry, switchMap, take, tap } from 'rxjs';
 import { Todo } from '../../core/models/todo.model';
 import { environment } from '../../../environments/environment';
 import { PatchTodoDto } from '../dto/patch-todo.dto';
@@ -13,6 +13,11 @@ export class TodoService {
     private _loading$ = new BehaviorSubject<boolean>(true);
     get loading$(): Observable<boolean> {
         return this._loading$.asObservable();
+    }
+
+    private _error$ = new Subject<any>();
+    get error$(): Observable<any> {
+        return this._error$.asObservable();
     }
 
     private _todos$ = new BehaviorSubject<Todo[]>([]);
@@ -35,6 +40,12 @@ export class TodoService {
         this.setLoadingStatus(true);
         this.getAllFromServer().pipe(
             delay(1000),
+            retry(3),
+            catchError(err => {
+                this.setLoadingStatus(false);
+                this._error$.next({ verb: "GET", name: err.name, message: 'Erreur lors de la récupération des données' });
+                throw err;
+            }),
             tap(todos => {
                 this.lastTodosLoad = Date.now();
                 this._todos$.next(todos);
@@ -52,6 +63,12 @@ export class TodoService {
             this.setLoadingStatus(true);
             return this.getOneFromServer(id).pipe(
                 delay(1000),
+                retry(3),
+                catchError(err => {
+                    this.setLoadingStatus(false);
+                    this._error$.next({ verb: "GET", name: err.name, message: 'Erreur lors de la récupération des données' });
+                    throw err;
+                }),
                 tap(() => {
                     this.setLoadingStatus(false);
                 })
@@ -76,8 +93,13 @@ export class TodoService {
                 todo)
             ),
             tap(updatedTodos => this._todos$.next(updatedTodos)),
-            switchMap(() => this.patchOneFromServer(id, todoModifications)
-            )
+            switchMap(() => this.patchOneFromServer(id, todoModifications).pipe(
+                retry(3),
+                catchError(err => {
+                    this._error$.next({ verb: "PATCH", name: err.name, message: 'Erreur lors de la mise à jour des données' });
+                    throw err;
+                }),
+            ))
         ).subscribe();
     }
 

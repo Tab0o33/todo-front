@@ -22,4 +22,11 @@
             </div>
         </div>
     </ng-container>
+    <ng-container *ngIf="error$ | async as error">
+        {{error}}
+        <div *ngIf="error.verb === 'GET'" class="alert alert-danger" role="alert">
+            <div class="text-center">{{error.message}}</div>
+        </div>
+        <app-alert *ngIf="error.verb === 'PATCH'" [message]="error.message"></app-alert>
+    </ng-container>
 </div>
